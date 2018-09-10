@@ -3,10 +3,12 @@ package com.sistnet.projeto.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-public class Pedido  implements Serializable {
+public class Pedido implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +27,9 @@ public class Pedido  implements Serializable {
     @ManyToOne
     @JoinColumn(name = "endereco_de_entrega_id")
     private Endereco  enderecoDeEntega;
+
+    @OneToMany(mappedBy = "id.pedido")
+    private Set<ItemPedido> itemPedido = new HashSet();
 
     public Pedido() {
     }
@@ -76,6 +81,14 @@ public class Pedido  implements Serializable {
         this.enderecoDeEntega = enderecoDeEntega;
     }
 
+    public Set<ItemPedido> getItemPedido() {
+        return itemPedido;
+    }
+
+    public void setItemPedido(Set<ItemPedido> itemPedido) {
+        this.itemPedido = itemPedido;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,4 +101,5 @@ public class Pedido  implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

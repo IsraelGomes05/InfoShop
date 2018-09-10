@@ -31,6 +31,8 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
     private PedidoRepository pedidoRepository;
     @Autowired
     private PagamentoRepository pagamentoRepository;
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(AplicacaoJavaApplication.class, args);
@@ -97,5 +99,18 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
         pedidoRepository.saveAll(Arrays.asList(pedido, pedido1));
 
         pagamentoRepository.saveAll(Arrays.asList(pagamento, pagamento1));
+
+        ItemPedido itemPedido = new ItemPedido(pedido, p1, 0.0, 1, 2000.00);
+        ItemPedido itemPedido1 = new ItemPedido(pedido, p3, 0.0, 2, 80.00);
+        ItemPedido itemPedido2 = new ItemPedido(pedido1, p2, 100.0, 1, 800.00);
+
+        pedido.getItemPedido().addAll(Arrays.asList(itemPedido,itemPedido1));
+        pedido.getItemPedido().addAll(Arrays.asList(itemPedido2));
+
+        p1.getItemPedido().addAll(Arrays.asList(itemPedido));
+        p2.getItemPedido().addAll(Arrays.asList(itemPedido2));
+        p3.getItemPedido().addAll(Arrays.asList(itemPedido1));
+
+        itemPedidoRepository.saveAll(Arrays.asList(itemPedido, itemPedido1, itemPedido2));
     }
 }
