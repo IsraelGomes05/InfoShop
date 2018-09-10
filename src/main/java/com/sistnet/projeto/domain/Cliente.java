@@ -1,5 +1,6 @@
 package com.sistnet.projeto.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sistnet.projeto.domain.enums.TipoCliente;
 
@@ -28,6 +29,7 @@ public class Cliente implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<Endereco> enderecos = new ArrayList();
 
+    @JsonBackReference
     @OneToMany(mappedBy = "cliente")
     private List<Pedido> pedidos = new ArrayList();
 

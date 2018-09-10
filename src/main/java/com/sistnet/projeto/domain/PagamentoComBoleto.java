@@ -1,5 +1,6 @@
 package com.sistnet.projeto.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sistnet.projeto.domain.enums.EstadoPagamento;
 
 import javax.persistence.Entity;
@@ -10,7 +11,10 @@ public class PagamentoComBoleto extends Pagamento{
 
     private static final long serialVersionUID = 1L;
 
+    @JsonFormat(pattern = "dd/mm/yyyy")
     private Date dataVencimento;
+
+    @JsonFormat(pattern = "dd/mm/yyyy")
     private Date dataPagemento;
 
     public PagamentoComBoleto() {

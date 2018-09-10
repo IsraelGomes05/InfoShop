@@ -1,5 +1,6 @@
 package com.sistnet.projeto.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sistnet.projeto.domain.enums.EstadoPagamento;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public abstract class Pagamento  implements Serializable {
     private Integer id;
     private Integer estadoPagamento;
 
+    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId
