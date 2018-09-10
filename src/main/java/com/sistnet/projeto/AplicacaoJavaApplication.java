@@ -1,8 +1,10 @@
 package com.sistnet.projeto;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import com.sistnet.projeto.domain.*;
+import com.sistnet.projeto.domain.enums.EstadoPagamento;
 import com.sistnet.projeto.domain.enums.TipoCliente;
 import com.sistnet.projeto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,10 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
     private ClienteRepository clienteRepository;
     @Autowired
     private EnderecoRepository enderecoRepository;
+    @Autowired
+    private PedidoRepository pedidoRepository;
+    @Autowired
+    private PagamentoRepository pagamentoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(AplicacaoJavaApplication.class, args);
@@ -68,11 +74,28 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
         cliente.getTelefones().addAll(Arrays.asList("26262666", "51515ss"));
 
         Endereco endereco = new Endereco(null, "Rua flores", "300", "Apto 300", "Jardim", "2324434",cliente ,cidade);
-        Endereco endereco1 = new Endereco(null, "Rua Matos", "212", "Apto 300", "Matão", "8678797",cliente ,cidade1);
+        Endereco endereco1 = new Endereco(null, "Rua Matos", "212", "Apto 321", "Matão", "8678797",cliente ,cidade1);
 
         cliente.getEnderecos().addAll(Arrays.asList(endereco, endereco1));
 
         clienteRepository.saveAll(Arrays.asList(cliente));
         enderecoRepository.saveAll(Arrays.asList(endereco, endereco1));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy hh:mm");
+
+        Pedido pedido = new Pedido(null, sdf.parse("30/09/2017 00:00"), cliente, endereco);
+        Pedido pedido1 = new Pedido(null, sdf.parse("30/10/2018 00:00"), cliente, endereco1);
+
+        Pagamento pagamento = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido,6);
+        pedido.setPagamento(pagamento);
+
+        Pagamento pagamento1 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido1, sdf.parse("20/10/2017 00:00"), null);
+        pedido1.setPagamento(pagamento1);
+
+        cliente.getPedidos().addAll(Arrays.asList(pedido, pedido1));
+
+        pedidoRepository.saveAll(Arrays.asList(pedido, pedido1));
+
+        pagamentoRepository.saveAll(Arrays.asList(pagamento, pagamento1));
     }
 }
