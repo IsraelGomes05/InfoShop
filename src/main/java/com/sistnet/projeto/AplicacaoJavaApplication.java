@@ -2,19 +2,13 @@ package com.sistnet.projeto;
 
 import java.util.Arrays;
 
-import com.sistnet.projeto.domain.Cidade;
-import com.sistnet.projeto.domain.Estado;
-import com.sistnet.projeto.repository.CidadeRepository;
-import com.sistnet.projeto.repository.EstadoRepository;
+import com.sistnet.projeto.domain.*;
+import com.sistnet.projeto.domain.enums.TipoCliente;
+import com.sistnet.projeto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.sistnet.projeto.domain.Categoria;
-import com.sistnet.projeto.domain.Produto;
-import com.sistnet.projeto.repository.CategoriaRepository;
-import com.sistnet.projeto.repository.ProdutoRepository;
 
 @SpringBootApplication
 public class AplicacaoJavaApplication implements CommandLineRunner {
@@ -27,6 +21,10 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
     private EstadoRepository estadoRepository;
     @Autowired
     private CidadeRepository cidadeRepository;
+    @Autowired
+    private ClienteRepository clienteRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(AplicacaoJavaApplication.class, args);
@@ -64,5 +62,17 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
 
         estadoRepository.saveAll(Arrays.asList(estado, estado1));
         cidadeRepository.saveAll(Arrays.asList(cidade, cidade1, cidade2));
+
+        Cliente cliente = new Cliente(null, "Maria silva", "maria@gmail.com", "465656666", TipoCliente.PESSOA_FISICA);
+
+        cliente.getTelefones().addAll(Arrays.asList("26262666", "51515ss"));
+
+        Endereco endereco = new Endereco(null, "Rua flores", "300", "Apto 300", "Jardim", "2324434",cliente ,cidade);
+        Endereco endereco1 = new Endereco(null, "Rua Matos", "212", "Apto 300", "Matão", "8678797",cliente ,cidade1);
+
+        cliente.getEnderecos().addAll(Arrays.asList(endereco, endereco1));
+
+        clienteRepository.saveAll(Arrays.asList(cliente));
+        enderecoRepository.saveAll(Arrays.asList(endereco, endereco1));
     }
 }
