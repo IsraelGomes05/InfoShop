@@ -1,6 +1,6 @@
 package com.sistnet.projeto.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sistnet.projeto.domain.enums.EstadoPagamento;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Pagamento  implements Serializable {
+public abstract class Pagamento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +17,7 @@ public abstract class Pagamento  implements Serializable {
     private Integer id;
     private Integer estadoPagamento;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "pedido_id")
     @MapsId
