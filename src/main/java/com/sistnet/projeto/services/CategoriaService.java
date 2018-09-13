@@ -1,5 +1,6 @@
 package com.sistnet.projeto.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.sistnet.projeto.services.exeptions.DataIntegrityExeption;
@@ -40,5 +41,9 @@ public class CategoriaService {
 		} catch (DataIntegrityViolationException ex){
 			throw new DataIntegrityExeption("Não é possível excluir uma categoria que possui produtos");
 		}
+	}
+
+	public List<Categoria> findAll() {
+		return repo.findAll();
 	}
 }
