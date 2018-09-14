@@ -1,9 +1,13 @@
 package com.sistnet.projeto.services;
 
+import com.sistnet.projeto.domain.Cidade;
 import com.sistnet.projeto.domain.Cliente;
-import com.sistnet.projeto.domain.Cliente;
+import com.sistnet.projeto.domain.Endereco;
+import com.sistnet.projeto.domain.enums.TipoCliente;
 import com.sistnet.projeto.dto.ClienteDTO;
+import com.sistnet.projeto.dto.ClienteNewDTO;
 import com.sistnet.projeto.repository.ClienteRepository;
+import com.sistnet.projeto.repository.EnderecoRepository;
 import com.sistnet.projeto.services.exeptions.DataIntegrityExeption;
 import com.sistnet.projeto.services.exeptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,57 +17,82 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ClienteService {
-	
-	@Autowired
-	private ClienteRepository repo;
-	
-	public Cliente find(Integer id) {
-		Optional<Cliente> obj = repo.findById(id);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-		"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
-	}
 
-	public Cliente insert(Cliente obj) {
-		obj.setId(null);
-		return repo.save(obj);
-	}
+    @Autowired
+    private ClienteRepository clienteRepository;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
-	public Cliente update(Cliente oldCliente) {
-		Cliente newCliente = find(oldCliente.getId());
-		updateData(newCliente, oldCliente);
-		return repo.save(newCliente);
-	}
+    public Cliente find(Integer id) {
+        Optional<Cliente> obj = clienteRepository.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundException(
+                "Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
+    }
 
-	public void delete(Integer id) {
-		this.find(id);
-		try {
-			repo.deleteById(id);
-		} catch (DataIntegrityViolationException ex) {
-			throw new DataIntegrityExeption("Não é possível excluir um cliente que possui pedido");
-		}
-	}
+    @Transactional
+    public Cliente insert(Cliente obj) {
+        obj.setId(null);
+        obj = clienteRepository.save(obj);
+        enderecoRepository.saveAll(obj.getEnderecos());
+        return obj;
+    }
 
-	public List<Cliente> findAll() {
-		return repo.findAll();
-	}
+    public Cliente update(Cliente oldCliente) {
+        Cliente newCliente = find(oldCliente.getId());
+        updateData(newCliente, oldCliente);
+        return clienteRepository.save(newCliente);
+    }
 
-	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
-		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-		return repo.findAll(pageRequest);
-	}
+    public void delete(Integer id) {
+        this.find(id);
+        try {
+            clienteRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityExeption("Não é possível excluir um cliente que possui pedido");
+        }
+    }
 
-	public Cliente fromDTO(ClienteDTO clienteDTO){
-		return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), null, null);
-	}
+    public List<Cliente> findAll() {
+        return clienteRepository.findAll();
+    }
 
-	private void updateData(Cliente newCliente, Cliente obj) {
-		newCliente.setNome(obj.getNome());
-		newCliente.setEmail(obj.getEmail());
-	}
+    public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return clienteRepository.findAll(pageRequest);
+    }
+
+    public Cliente fromDTO(ClienteDTO clienteDTO) {
+        return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), null, null);
+    }
+
+    public Cliente fromDTO(ClienteNewDTO objDTO) {
+        Cliente cli = new Cliente(null, objDTO.getNome(), objDTO.getEmail(), objDTO.getCpfOuCnpj(), TipoCliente.toEnum(objDTO.getTipo()));
+        Cidade cidade = new Cidade(objDTO.getCidadeId(), null, null);
+        Endereco end = new Endereco(null, objDTO.getLogradouro(), objDTO.getNumero(), objDTO.getComplemento(), objDTO.getBairro(), objDTO.getCep(), cli, cidade);
+
+        cli.getEnderecos().add(end);
+        cli.getTelefones().add(objDTO.getTelefone());
+
+        if (objDTO.getTelefone1() != null) {
+            cli.getTelefones().add(objDTO.getTelefone1());
+        }
+
+        if (objDTO.getTelefone2() != null) {
+            cli.getTelefones().add(objDTO.getTelefone2());
+        }
+
+        return cli;
+    }
+
+    private void updateData(Cliente newCliente, Cliente obj) {
+        newCliente.setNome(obj.getNome());
+        newCliente.setEmail(obj.getEmail());
+    }
 
 }
