@@ -10,7 +10,6 @@ import com.sistnet.projeto.domain.Categoria;
 import com.sistnet.projeto.services.CategoriaService;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.Servlet;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
