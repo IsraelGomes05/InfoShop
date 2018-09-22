@@ -33,7 +33,7 @@ public class Pedido implements Serializable {
     private Endereco  enderecoDeEntega;
 
     @OneToMany(mappedBy = "id.pedido")
-    private Set<ItemPedido> itemPedido = new HashSet();
+    private Set<ItemPedido> itens = new HashSet();
 
     public Pedido() {
     }
@@ -85,13 +85,22 @@ public class Pedido implements Serializable {
         this.enderecoDeEntega = enderecoDeEntega;
     }
 
-    public Set<ItemPedido> getItemPedido() {
-        return itemPedido;
+    public Set<ItemPedido> getItens() {
+        return itens;
     }
 
-    public void setItemPedido(Set<ItemPedido> itemPedido) {
-        this.itemPedido = itemPedido;
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
     }
+
+    public double getValorTotal(){
+        double soma = 0.0;
+        for (ItemPedido itemPedido :this.itens) {
+            soma += itemPedido.getSubTotal();
+        }
+        return soma;
+    }
+
 
     @Override
     public boolean equals(Object o) {

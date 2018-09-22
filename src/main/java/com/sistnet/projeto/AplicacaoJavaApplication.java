@@ -135,8 +135,8 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
         ItemPedido itemPedido1 = new ItemPedido(pedido, p3, 0.0, 2, 80.00);
         ItemPedido itemPedido2 = new ItemPedido(pedido1, p2, 100.0, 1, 800.00);
 
-        pedido.getItemPedido().addAll(Arrays.asList(itemPedido,itemPedido1));
-        pedido.getItemPedido().addAll(Arrays.asList(itemPedido2));
+        pedido.getItens().addAll(Arrays.asList(itemPedido,itemPedido1));
+        pedido.getItens().addAll(Arrays.asList(itemPedido2));
 
         p1.getItemPedido().addAll(Arrays.asList(itemPedido));
         p2.getItemPedido().addAll(Arrays.asList(itemPedido2));
