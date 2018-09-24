@@ -1,6 +1,8 @@
 package com.sistnet.projeto.config;
 
 import com.sistnet.projeto.services.DBService;
+import com.sistnet.projeto.services.EmailService;
+import com.sistnet.projeto.services.SMTPEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,5 +30,10 @@ public class DevConfig {
 
         dbService.instantiateDataBase();
         return true;
+    }
+
+    @Bean
+    public EmailService emailService(){
+        return new SMTPEmailService();
     }
 }
