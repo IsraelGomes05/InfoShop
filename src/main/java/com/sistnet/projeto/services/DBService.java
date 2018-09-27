@@ -2,6 +2,7 @@ package com.sistnet.projeto.services;
 
 import com.sistnet.projeto.domain.*;
 import com.sistnet.projeto.domain.enums.EstadoPagamento;
+import com.sistnet.projeto.domain.enums.Perfil;
 import com.sistnet.projeto.domain.enums.TipoCliente;
 import com.sistnet.projeto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,16 +101,22 @@ public class DBService {
         cidadeRepository.saveAll(Arrays.asList(cidade, cidade1, cidade2));
 
         Cliente cliente = new Cliente(null, "Maria silva", "israelsilva05@hotmail.com", "465656666", TipoCliente.PESSOA_FISICA, encoder.encode("122"));
+        Cliente cliente1 = new Cliente(null, "Ana silva", "israelsilva05@hotmail.com", "465656626", TipoCliente.PESSOA_FISICA, encoder.encode("12222"));
+        cliente1.addPerfil(Perfil.ADMIN);
 
         cliente.getTelefones().addAll(Arrays.asList("26262666", "51515ss"));
+        cliente1.getTelefones().addAll(Arrays.asList("21231323", "22344664"));
 
         Endereco endereco = new Endereco(null, "Rua flores", "300", "Apto 300", "Jardim", "2324434",cliente ,cidade);
         Endereco endereco1 = new Endereco(null, "Rua Matos", "212", "Apto 321", "Matão", "8678797",cliente ,cidade1);
+        Endereco endereco2 = new Endereco(null, "Rua Matos", "212", "Apto 321", "Matão", "8678797",cliente ,cidade2);
 
         cliente.getEnderecos().addAll(Arrays.asList(endereco, endereco1));
 
         clienteRepository.saveAll(Arrays.asList(cliente));
+        clienteRepository.saveAll(Arrays.asList(cliente1));
         enderecoRepository.saveAll(Arrays.asList(endereco, endereco1));
+        enderecoRepository.saveAll(Arrays.asList(endereco, endereco1, endereco2));
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy hh:mm");
 
