@@ -4,7 +4,6 @@ import com.sistnet.projeto.domain.ItemPedido;
 import com.sistnet.projeto.domain.PagamentoComBoleto;
 import com.sistnet.projeto.domain.Pedido;
 import com.sistnet.projeto.domain.enums.EstadoPagamento;
-import com.sistnet.projeto.repository.ClienteRepository;
 import com.sistnet.projeto.repository.ItemPedidoRepository;
 import com.sistnet.projeto.repository.PagamentoRepository;
 import com.sistnet.projeto.repository.PedidoRepository;
