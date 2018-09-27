@@ -5,6 +5,7 @@ import com.sistnet.projeto.domain.enums.EstadoPagamento;
 import com.sistnet.projeto.domain.enums.TipoCliente;
 import com.sistnet.projeto.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -14,6 +15,8 @@ import java.util.Arrays;
 @Service
 public class DBService {
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
     @Autowired
     private CategoriaRepository categoriaRepository;
     @Autowired
@@ -96,7 +99,7 @@ public class DBService {
         estadoRepository.saveAll(Arrays.asList(estado, estado1));
         cidadeRepository.saveAll(Arrays.asList(cidade, cidade1, cidade2));
 
-        Cliente cliente = new Cliente(null, "Maria silva", "israelsilva05@hotmail.com", "465656666", TipoCliente.PESSOA_FISICA);
+        Cliente cliente = new Cliente(null, "Maria silva", "israelsilva05@hotmail.com", "465656666", TipoCliente.PESSOA_FISICA, encoder.encode("122"));
 
         cliente.getTelefones().addAll(Arrays.asList("26262666", "51515ss"));
 
