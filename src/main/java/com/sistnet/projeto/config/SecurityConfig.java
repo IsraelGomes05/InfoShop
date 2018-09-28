@@ -1,6 +1,7 @@
 package com.sistnet.projeto.config;
 
 import com.sistnet.projeto.security.JWTAuthenticationFilter;
+import com.sistnet.projeto.security.JWTAuthorizationFilter;
 import com.sistnet.projeto.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -53,6 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
