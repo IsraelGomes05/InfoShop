@@ -1,8 +1,6 @@
 package com.sistnet.projeto.resources;
 
-import com.sistnet.projeto.domain.Categoria;
 import com.sistnet.projeto.domain.Pedido;
-import com.sistnet.projeto.dto.CategoriaDTO;
 import com.sistnet.projeto.services.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
