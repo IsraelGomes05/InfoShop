@@ -1,14 +1,17 @@
 package com.sistnet.projeto.services;
 
-import com.sistnet.projeto.domain.ItemPedido;
-import com.sistnet.projeto.domain.PagamentoComBoleto;
-import com.sistnet.projeto.domain.Pedido;
+import com.sistnet.projeto.domain.*;
 import com.sistnet.projeto.domain.enums.EstadoPagamento;
 import com.sistnet.projeto.repository.ItemPedidoRepository;
 import com.sistnet.projeto.repository.PagamentoRepository;
 import com.sistnet.projeto.repository.PedidoRepository;
+import com.sistnet.projeto.security.UserSS;
+import com.sistnet.projeto.services.exeptions.AuthorizationExeption;
 import com.sistnet.projeto.services.exeptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,5 +66,16 @@ public class PedidoService {
 		itemPedidoRepository.saveAll(obj.getItens());
 		emailService.sendOrderConfirmationHtmlEmail(obj);
 		return obj;
+	}
+
+	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		if (user == null){
+			throw new AuthorizationExeption("Acesso negado");
+		}
+
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+		Cliente cliente =  clienteService.find(user.getId());
+		return repo.findByCliente(cliente, pageRequest);
 	}
 }
