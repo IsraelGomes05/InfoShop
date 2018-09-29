@@ -2,6 +2,7 @@ package com.sistnet.projeto.resources.exeptions;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sistnet.projeto.services.exeptions.AuthorizationExeption;
 import com.sistnet.projeto.services.exeptions.DataIntegrityExeption;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +37,11 @@ public class ResourceExeptionHundler {
 		}
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+	}
+
+	@ExceptionHandler(AuthorizationExeption.class)
+	public ResponseEntity<StandarError> objectNotFound(AuthorizationExeption e, HttpServletRequest request){
+		StandarError error = new StandarError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
 	}
 }

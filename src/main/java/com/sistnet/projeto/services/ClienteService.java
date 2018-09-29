@@ -3,11 +3,14 @@ package com.sistnet.projeto.services;
 import com.sistnet.projeto.domain.Cidade;
 import com.sistnet.projeto.domain.Cliente;
 import com.sistnet.projeto.domain.Endereco;
+import com.sistnet.projeto.domain.enums.Perfil;
 import com.sistnet.projeto.domain.enums.TipoCliente;
 import com.sistnet.projeto.dto.ClienteDTO;
 import com.sistnet.projeto.dto.ClienteNewDTO;
 import com.sistnet.projeto.repository.ClienteRepository;
 import com.sistnet.projeto.repository.EnderecoRepository;
+import com.sistnet.projeto.security.UserSS;
+import com.sistnet.projeto.services.exeptions.AuthorizationExeption;
 import com.sistnet.projeto.services.exeptions.DataIntegrityExeption;
 import com.sistnet.projeto.services.exeptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,12 @@ public class ClienteService {
     private EnderecoRepository enderecoRepository;
 
     public Cliente find(Integer id) {
+
+        UserSS user = UserService.authenticated();
+        if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()) ){
+            throw new AuthorizationExeption("Acesso negado");
+        }
+
         Optional<Cliente> obj = clienteRepository.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
