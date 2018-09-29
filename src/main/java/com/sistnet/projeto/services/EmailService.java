@@ -1,5 +1,6 @@
 package com.sistnet.projeto.services;
 
+import com.sistnet.projeto.domain.Cliente;
 import com.sistnet.projeto.domain.Pedido;
 import org.springframework.mail.SimpleMailMessage;
 
@@ -14,4 +15,6 @@ public interface EmailService {
     void sendOrderConfirmationHtmlEmail(Pedido obj);
 
     void sendHtmlEmail(MimeMessage msg);
+
+    void sendNewPasswordEmail(Cliente cliente, String newPass);
 }
