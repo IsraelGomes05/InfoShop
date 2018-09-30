@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sistnet.projeto.dto.CategoriaDTO;
-import com.sistnet.projeto.services.exeptions.DataIntegrityExeption;
+import com.sistnet.projeto.services.exeptions.DataIntegrityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -44,7 +44,7 @@ public class CategoriaService {
         try {
             repo.deleteById(id);
         } catch (DataIntegrityViolationException ex) {
-            throw new DataIntegrityExeption("Não é possível excluir uma categoria que possui produtos");
+            throw new DataIntegrityException("Não é possível excluir uma categoria que possui produtos");
         }
     }
 

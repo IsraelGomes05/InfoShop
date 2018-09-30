@@ -6,7 +6,7 @@ import com.sistnet.projeto.repository.ItemPedidoRepository;
 import com.sistnet.projeto.repository.PagamentoRepository;
 import com.sistnet.projeto.repository.PedidoRepository;
 import com.sistnet.projeto.security.UserSS;
-import com.sistnet.projeto.services.exeptions.AuthorizationExeption;
+import com.sistnet.projeto.services.exeptions.AuthorizationException;
 import com.sistnet.projeto.services.exeptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -71,7 +71,7 @@ public class PedidoService {
 	public Page<Pedido> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		UserSS user = UserService.authenticated();
 		if (user == null){
-			throw new AuthorizationExeption("Acesso negado");
+			throw new AuthorizationException("Acesso negado");
 		}
 
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);

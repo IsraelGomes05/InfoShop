@@ -10,8 +10,8 @@ import com.sistnet.projeto.dto.ClienteNewDTO;
 import com.sistnet.projeto.repository.ClienteRepository;
 import com.sistnet.projeto.repository.EnderecoRepository;
 import com.sistnet.projeto.security.UserSS;
-import com.sistnet.projeto.services.exeptions.AuthorizationExeption;
-import com.sistnet.projeto.services.exeptions.DataIntegrityExeption;
+import com.sistnet.projeto.services.exeptions.AuthorizationException;
+import com.sistnet.projeto.services.exeptions.DataIntegrityException;
 import com.sistnet.projeto.services.exeptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,7 +43,7 @@ public class ClienteService {
 
         UserSS user = UserService.authenticated();
         if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()) ){
-            throw new AuthorizationExeption("Acesso negado");
+            throw new AuthorizationException("Acesso negado");
         }
 
         Optional<Cliente> obj = clienteRepository.findById(id);
@@ -70,7 +70,7 @@ public class ClienteService {
         try {
             clienteRepository.deleteById(id);
         } catch (DataIntegrityViolationException ex) {
-            throw new DataIntegrityExeption("Não é possível excluir um cliente que possui pedido");
+            throw new DataIntegrityException("Não é possível excluir um cliente que possui pedido");
         }
     }
 
