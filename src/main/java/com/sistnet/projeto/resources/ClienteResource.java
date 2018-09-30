@@ -1,9 +1,6 @@
 package com.sistnet.projeto.resources;
 
-import com.sistnet.projeto.domain.Categoria;
 import com.sistnet.projeto.domain.Cliente;
-import com.sistnet.projeto.domain.Cliente;
-import com.sistnet.projeto.dto.CategoriaDTO;
 import com.sistnet.projeto.dto.ClienteDTO;
 import com.sistnet.projeto.dto.ClienteNewDTO;
 import com.sistnet.projeto.services.ClienteService;
@@ -12,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -74,5 +72,11 @@ public class ClienteResource {
 		Page<Cliente> lista = service.findPage(page, linesPerPage, orderBy, direction);
 		Page<ClienteDTO> listaDto = lista.map(ClienteDTO::new);
 		return ResponseEntity.ok().body(listaDto);
+	}
+
+	@RequestMapping(value = "/picture",method = RequestMethod.POST)
+	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
+		URI uri = service.uploadProfilePicture(file);
+		return ResponseEntity.created(uri).build();
 	}
 }

@@ -16,8 +16,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AplicacaoJavaApplication implements CommandLineRunner {
 
-    @Autowired
-    private S3Service s3Service;
 
     public static void main(String[] args) {
         SpringApplication.run(AplicacaoJavaApplication.class, args);
@@ -25,6 +23,5 @@ public class AplicacaoJavaApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        s3Service.uploadFile("C:/Users/Israel Gomes/Pictures/Cursos/Captura de Tela (4).png");
     }
 }
