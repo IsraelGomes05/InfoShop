@@ -45,6 +45,7 @@ public class S3Service {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(contentType);
             LOG.info("Iniciando Upload...");
+
             amazonS3.putObject(bucketName, fileName, is, metadata);
             LOG.info("Upload Finalizado!");
             return this.amazonS3.getUrl(bucketName, fileName).toURI();

@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.jnlp.IntegrationService;
 import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.net.URI;
@@ -44,6 +45,8 @@ public class ClienteService {
     private ImageService imageService;
     @Value("${img.prefix.client.profile}")
     private String prefix;
+    @Value(("${img.profile.size}"))
+    private Integer size;
 
     public Cliente find(Integer id) {
 
@@ -124,8 +127,9 @@ public class ClienteService {
         }
 
         BufferedImage jpgImg = imageService.getJpgImageFromFile(file);
-
-        String fileName = prefix + user.getId() + ";jpg";
+        jpgImg = imageService.cropSquare(jpgImg);
+        jpgImg = imageService.resize(jpgImg, size);
+        String fileName = prefix + user.getId() + ".jpg";
 
         return s3Service.uploadFile(imageService.getImputStream(jpgImg, "jpg"), fileName, "image");
     }
