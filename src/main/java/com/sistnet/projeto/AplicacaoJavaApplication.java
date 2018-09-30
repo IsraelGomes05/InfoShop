@@ -7,6 +7,7 @@ import com.sistnet.projeto.domain.*;
 import com.sistnet.projeto.domain.enums.EstadoPagamento;
 import com.sistnet.projeto.domain.enums.TipoCliente;
 import com.sistnet.projeto.repository.*;
+import com.sistnet.projeto.services.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,12 +16,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AplicacaoJavaApplication implements CommandLineRunner {
 
+    @Autowired
+    private S3Service s3Service;
+
     public static void main(String[] args) {
         SpringApplication.run(AplicacaoJavaApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-
+        s3Service.uploadFile("C:/Users/Israel Gomes/Pictures/Cursos/Captura de Tela (4).png");
     }
 }
