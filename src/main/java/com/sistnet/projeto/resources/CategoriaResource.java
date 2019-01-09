@@ -1,6 +1,9 @@
 package com.sistnet.projeto.resources;
 
 import com.sistnet.projeto.dto.CategoriaDTO;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,7 @@ public class CategoriaResource {
     @Autowired
     private CategoriaService service;
 
+    @ApiOperation(value = "Busca por id")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Categoria> find(@PathVariable Integer id) {
         Categoria obj = service.find(id);
@@ -44,10 +48,13 @@ public class CategoriaResource {
     public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto, @PathVariable Integer id) {
         Categoria obj = service.fromDTO(objDto);
         obj.setId(id);
-        obj = service.update(obj);
+        service.update(obj);
         return ResponseEntity.noContent().build();
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Não é possível excluir uma categoria que possui produtos"),
+            @ApiResponse(code = 404, message = "Código inexistente")})
     @PreAuthorize("hasAnyRole('ADMIN')")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
